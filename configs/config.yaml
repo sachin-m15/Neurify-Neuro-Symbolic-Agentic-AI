@@ -1,0 +1,18 @@
+chunking:
+  chunk_size: 900
+  overlap: 150
+
+retrieval:
+  top_k: 10
+  rerank: true
+  expand_query: true
+  filters: {}
+
+verification:
+  support_threshold: 0.75
+  max_retries: 2
+
+models:
+  openai_chat_model: "gpt-4o-mini"
+  openai_embedding_model: "text-embedding-3-large"
+  nli_model: "roberta-large-mnli"

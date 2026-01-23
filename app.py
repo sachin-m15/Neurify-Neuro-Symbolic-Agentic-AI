@@ -1,0 +1,187 @@
+import pickle
+import streamlit as st
+from dotenv import load_dotenv
+
+from src.core.llm import ChatLLM
+from src.generation.claim_generator import ClaimGenerator
+from src.retrieval.retriever import Retriever
+from src.verification.entailment import EntailmentScorer
+from src.verification.verifier import Verifier
+from src.agent.orchestrator import VerifiedRAGAgent
+from src.agent.baseline_orchestrator import BaselineRAGAgent
+
+load_dotenv()
+
+@st.cache_resource
+def load_agents():
+    with open("data/indexes/store.pkl", "rb") as f:
+        store = pickle.load(f)
+
+    llm = ChatLLM()
+    baseline_retriever = Retriever(store=store)  # No enhancements
+    verified_retriever = Retriever(store=store, llm=llm)  # With enhancements
+    gen = ClaimGenerator(llm=llm)
+
+    entail = EntailmentScorer("roberta-large-mnli")
+    verifier = Verifier(entailment_scorer=entail, support_threshold=0.75)
+
+    baseline_agent = BaselineRAGAgent(
+        retriever=baseline_retriever,
+        claim_generator=gen
+    )
+
+    verified_agent = VerifiedRAGAgent(
+        retriever=verified_retriever,
+        claim_generator=gen,
+        verifier=verifier,
+        max_retries=2
+    )
+
+    return baseline_agent, verified_agent
+
+st.set_page_config(page_title="PDF Verified RAG", layout="wide")
+st.title("📄✅ PDF Verified RAG (Hallucination-Proof QA)")
+
+st.write("Ask questions from your indexed PDFs. The system returns answers only if claims are verified.")
+
+question = st.text_input("Your Question")
+
+if st.button("Run") and question:
+    baseline_agent, verified_agent = load_agents()
+
+    # Run both agents
+    baseline_result = baseline_agent.run(question)
+    verified_result = verified_agent.run(question)
+
+    st.header("🔍 Comparison: Baseline RAG vs Verified RAG")
+    st.markdown("---")
+
+    # Display question prominently
+    st.subheader(f"❓ Question: {question}")
+    st.markdown("---")
+
+    # Side-by-side comparison
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("🔍 Baseline RAG")
+        st.caption("(Standard Retrieval + Generation)")
+
+        # Metrics
+        metric_col1, metric_col2, metric_col3 = st.columns(3)
+        with metric_col1:
+            st.metric("Status", baseline_result["status"])
+        with metric_col2:
+            st.metric("Answer", "Generated" if baseline_result["answer"] else "None")
+        with metric_col3:
+            st.metric("Claims", len(baseline_result["claims"]))
+
+        st.write("**Answer:**", baseline_result["answer"])
+
+    with col2:
+        st.subheader("🛡️ Verified RAG")
+        st.caption("(Enhanced Retrieval + Neuro-Symbolic Verification)")
+
+        # Metrics
+        metric_col1, metric_col2, metric_col3 = st.columns(3)
+        with metric_col1:
+            st.metric("Status", verified_result["status"])
+        with metric_col2:
+            if verified_result["answer"] == "NOT_ENOUGH_EVIDENCE":
+                st.error("❌ No verified info")
+            else:
+                st.success("✅ Verified")
+        with metric_col3:
+            st.metric("Claims", len(verified_result["claims"]))
+
+        if verified_result["answer"] == "NOT_ENOUGH_EVIDENCE":
+            st.error("❌ No verified information found for this query in the indexed documents.")
+        else:
+            st.write("**Answer:**", verified_result["answer"])
+
+    st.markdown("---")
+    
+    st.markdown("---")    
+    # Verification Report (full width)
+    st.subheader("🔍 Neuro-Symbolic Verification Results")
+    with st.expander("View Detailed Verification", expanded=True):
+        verification = verified_result.get("verification", {})
+        if verification:
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Overall Status", verification.get('overall_status'))
+            with col2:
+                supported = sum(1 for cr in verification.get("claim_reports", []) if cr["status"] == "SUPPORTED")
+                total = len(verification.get("claim_reports", []))
+                st.metric("Claims Supported", f"{supported}/{total}")
+
+            st.write("**Claim Verification Details:**")
+            for claim in verification.get("claim_reports", []):
+                status_icon = "✅" if claim["status"] == "SUPPORTED" else "❌"
+                st.write(f"{status_icon} **Claim {claim['claim_id']}:** {claim['status']} (Entailment Score: {claim['score']:.3f})")
+                if claim.get("reasons"):
+                    st.write("   *Reasons:*", ", ".join(claim["reasons"]))
+        else:
+            st.json(verification)
+
+    # Comparison Analysis
+    st.subheader("⚖️ Comparison Analysis")
+    comp_col1, comp_col2 = st.columns(2)
+
+    with comp_col1:
+        st.write("**Answer Comparison:**")
+        if baseline_result['answer'] != verified_result['answer']:
+            st.error("❌ **Answers Differ** - Potential hallucination detected!")
+            st.write("**Baseline:**", baseline_result['answer'])
+            st.write("**Verified:**", verified_result['answer'])
+        else:
+            st.success("✅ **Answers Match**")
+
+    with comp_col2:
+        st.write("**Trustworthiness:**")
+        if verified_result['status'] == 'REFUSE':
+            st.warning("🛑 **Verified RAG refused to answer** - insufficient evidence")
+        elif verified_result['status'] == 'PASS':
+            st.success("✅ **Verified RAG passed verification** - answer is trustworthy")
+        else:
+            st.info("🔄 **Verification in progress**")
+
+    # Results Comparison Table
+    st.subheader("📋 Results Comparison Table")
+    results_data = {
+        "Metric": ["Status", "Answer Provided", "Claims Generated", "Verification Applied", "Hallucination Risk"],
+        "Baseline RAG": [
+            baseline_result["status"],
+            "Yes" if baseline_result["answer"] else "No",
+            str(len(baseline_result["claims"])),
+            "No",
+            "High"
+        ],
+        "Verified RAG": [
+            verified_result["status"],
+            "Yes" if verified_result["answer"] != "NOT_ENOUGH_EVIDENCE" else "No",
+            str(len(verified_result["claims"])),
+            "Yes" if verified_result.get("verification") else "No",
+            "Low" if verified_result.get("verification", {}).get("overall_status") == "PASS" else "Medium"
+        ]
+    }
+
+    st.table(results_data)
+
+    # Additional details in expanders
+    if verified_result.get("status") == "PASS" and verified_result["answer"] != "NOT_ENOUGH_EVIDENCE":
+        with st.expander("📋 Claims Breakdown", expanded=False):
+            st.json(verified_result.get("claims", []))
+
+        with st.expander("📄 Retrieved Evidence Chunks", expanded=False):
+            chunks = verified_result.get("retrieved_chunks", [])
+            if chunks:
+                for i, item in enumerate(chunks):
+                    chunk = item["chunk"]
+                    score = item["score"]
+                    st.write(f"**Chunk {i+1}:** Retrieval Score: {score:.3f}")
+                    st.write(f"**Text:** {chunk['text'][:300]}...")
+                    st.write(f"**Source:** {chunk['doc_id']} p.{chunk['page']}")
+                    st.divider()
+            else:
+                st.json(chunks)

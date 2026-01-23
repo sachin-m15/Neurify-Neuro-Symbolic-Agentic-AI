@@ -1,0 +1,16 @@
+streamlit
+python-dotenv
+pydantic
+
+openai
+tiktoken
+
+faiss-cpu
+numpy
+
+pdfplumber
+pypdf
+
+transformers
+torch
+sentencepiece
