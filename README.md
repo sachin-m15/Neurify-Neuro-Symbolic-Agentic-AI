@@ -291,8 +291,5 @@ Neurofy optimizes for correctness and safety.
 ## 🏁 Final Note
 
 Neurofy is not a chatbot.
-
-It is a:
- **Neuro-symbolic, agentic verification engine that governs when AI systems are allowed to answer.**
-
+It is a **Neuro-symbolic, agentic verification engine that governs when AI systems are allowed to answer.**
 That distinction is the core contribution of this project.
