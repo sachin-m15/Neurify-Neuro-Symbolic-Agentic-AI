@@ -1,5 +1,7 @@
 # Neurofy — Verification-First Agentic RAG
- A neuro-symbolic verification engine that governs when Retrieval-Augmented Generation (RAG) systems are allowed to answer, retry, or refuse — based on provable evidence from documents.
+
+   A neuro-symbolic verification engine that governs when Retrieval-Augmented Generation (RAG) systems are allowed to answer, retry, or refuse — based on provable evidence from documents.
+
 ---
 
 ## 📌 Overview
@@ -38,6 +40,8 @@ With verification, it becomes a decision-making, agentic AI system.
 - ✅ Agentic retry loop (retrieve → verify → retry → decide)
 - ✅ Numeric and citation consistency checks
 - ✅ Designed for factual, policy, and guideline documents
+ 
+---
 
 ## 🏗️ Architecture
 ```
@@ -77,6 +81,7 @@ Neurofy combines two reasoning paradigms:
 - Enforces refusal when rules are violated
 
 A claim is accepted only if it passes both.
+
 ---
 
 ## 📁Project Structure
@@ -210,6 +215,7 @@ The system:
 - The query requests unsafe or personalized medical advice
 
 This refusal behavior is intentional and desirable.
+
 ---
 
 ## 📊 Evaluation Philosophy
@@ -288,7 +294,6 @@ Neurofy optimizes for correctness and safety.
 Neurofy is not a chatbot.
 
 It is a:
-
  **Neuro-symbolic, agentic verification engine that governs when AI systems are allowed to answer.**
 
 That distinction is the core contribution of this project.
