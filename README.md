@@ -10,7 +10,6 @@ Neurofy is a Verified Agentic RAG system designed to reduce hallucinations in do
 Instead of always generating answers, Neurofy verifies every claim using a combination of:
 
 - **Neural reasoning** (transformer-based entailment models)
-
 - **Symbolic reasoning** (rule-based constraints and checks)
 
 If claims cannot be verified, the system retries retrieval or refuses to answer.
@@ -75,9 +74,9 @@ Neurofy combines two reasoning paradigms:
 ### 📐 Symbolic Reasoning
 
 - Hard logical constraints:
-- - Every claim must have citations
-- - Citations must exist in retrieved evidence
-- - Numeric values must match exactly
+  - Every claim must have citations
+  - Citations must exist in retrieved evidence
+  - Numeric values must match exactly
 - Enforces refusal when rules are violated
 
 A claim is accepted only if it passes both.
