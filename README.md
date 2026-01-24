@@ -1,6 +1,8 @@
-# Neurofy — Verification-First Agentic RAG
+# Neurify — Verification-First Agentic RAG System
 
-   A neuro-symbolic verification engine that governs when Retrieval-Augmented Generation (RAG) systems are allowed to answer, retry, or refuse — based on provable evidence from documents.
+   A neuro-symbolic verification engine that governs when Retrieval-Augmented Generation (RAG) systems are allowed to answer, retry, or refuse, based on provable evidence from documents.
+
+   🔗 **Live Demo:** <https://neurify.streamlit.app/>
 
 ---
 

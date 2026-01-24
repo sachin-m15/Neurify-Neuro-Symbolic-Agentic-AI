@@ -1,5 +1,6 @@
 import pickle
 import streamlit as st
+import pandas as pd
 from dotenv import load_dotenv
 
 from src.core.llm import ChatLLM
@@ -38,7 +39,7 @@ def load_agents():
     gen = ClaimGenerator(llm=llm)
 
     entail = EntailmentScorer("roberta-large-mnli")
-    verifier = Verifier(entailment_scorer=entail, support_threshold=0.75)
+    verifier = Verifier(entailment_scorer=entail, support_threshold=support_threshold)
 
     baseline_agent = BaselineRAGAgent(
         retriever=baseline_retriever,
@@ -54,21 +55,75 @@ def load_agents():
 
     return baseline_agent, verified_agent
 
-st.set_page_config(page_title="Verified RAG", layout="wide")
-st.title("✅ Verified RAG (Hallucination-Proof QA)")
+st.set_page_config(page_title="Neurify", layout="wide", page_icon="🧠")
+# Custom CSS for better styling
+st.markdown("""
+<style>
+    .main-header {
+        font-size: 3.5em;
+        color: #1f77b4;
+        text-align: left;
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+    .sub-header {
+        font-size: 1.5em;
+        color: #666;
+        text-align: left;
+        margin-bottom: 30px;
+    }
+    .card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .metric-card {
+        text-align: center;
+        background-color: #e9ecef;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 5px;
+    }
+    .success-text { color: #28a745; }
+    .error-text { color: #dc3545; }
+    .warning-text { color: #ffc107; }
+</style>
+""", unsafe_allow_html=True)
+# Sidebar
+with st.sidebar:
+    st.title("🛠️ Settings")
+    st.markdown("---")
+    support_threshold = st.slider("Verification Threshold", 0.0, 1.0, 0.75, 0.05)
+    st.markdown("Adjust the minimum entailment score required for claim verification.")
+    st.markdown("---")
+    st.markdown("### About Neurify")
+    st.write("Neurify uses neuro-symbolic AI to verify RAG responses against document evidence, preventing hallucinations.")
+    st.markdown("---")
+    st.markdown("**Features:**")
+    st.write("• Baseline vs Verified RAG comparison")
+    st.write("• Real-time verification")
+    st.write("• Detailed claim analysis")
+st.title("🧠 Neurify")
+st.markdown('<p class="main-header">Hallucination-Proof</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">Neuro-symbolic verification engine for trustworthy Retrieval-Augmented Generation</p>', unsafe_allow_html=True)
+st.markdown("---")
+st.write("💡 Ask questions from your indexed PDFs. Get answers only when claims are verified against evidence.")
+st.header("💬 Enter your question here...")
+question = st.text_area("", height=80, placeholder="Ask anything from your indexed documents...")
 
-st.write("Ask questions from your indexed PDFs. The system returns answers only if claims are verified.")
+baseline_agent, verified_agent = load_agents()
+verified_agent.verifier.support_threshold = support_threshold
 
-question = st.text_input("Your Question")
+if st.button("🚀 Run Analysis", type="primary") and question:
+    with st.spinner("🧠 Processing your question with neuro-symbolic verification..."):
+        
+        # Run both agents
+        baseline_result = baseline_agent.run(question)
+        verified_result = verified_agent.run(question)
 
-if st.button("Run") and question:
-    baseline_agent, verified_agent = load_agents()
-
-    # Run both agents
-    baseline_result = baseline_agent.run(question)
-    verified_result = verified_agent.run(question)
-
-    st.header("🔍 Comparison: Baseline RAG vs Verified RAG")
+    st.header("⚡ Analysis Results: Baseline vs Verified RAG")
     st.markdown("---")
 
     # Display question prominently
@@ -119,7 +174,7 @@ if st.button("Run") and question:
     st.markdown("---")    
     # Verification Report (full width)
     st.subheader("🔍 Neuro-Symbolic Verification Results")
-    with st.expander("View Detailed Verification", expanded=True):
+    with st.expander("🔍 Detailed Neuro-Symbolic Verification", expanded=True):
         verification = verified_result.get("verification", {})
         if verification:
             col1, col2 = st.columns(2)
@@ -182,7 +237,17 @@ if st.button("Run") and question:
     }
 
     st.table(results_data)
-
+    
+    st.subheader("📊 Verification Metrics")
+    verification = verified_result.get("verification", {})
+    supported = sum(1 for cr in verification.get("claim_reports", []) if cr["status"] == "SUPPORTED") if verification else 0
+    chart_data = pd.DataFrame({
+        'Metric': ['Generated Claims', 'Supported Claims'],
+        'Baseline RAG': [len(baseline_result["claims"]), 0],
+        'Verified RAG': [len(verified_result["claims"]), supported]
+    })
+    st.bar_chart(chart_data.set_index('Metric'))
+    
     # Additional details in expanders
     if verified_result.get("status") == "PASS" and verified_result["answer"] != "NOT_ENOUGH_EVIDENCE":
         with st.expander("📋 Claims Breakdown", expanded=False):
@@ -200,3 +265,4 @@ if st.button("Run") and question:
                     st.divider()
             else:
                 st.json(chunks)
+st.caption("Made by Sachin")
