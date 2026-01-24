@@ -13,6 +13,21 @@ from src.agent.baseline_orchestrator import BaselineRAGAgent
 load_dotenv()
 
 @st.cache_resource
+def load_store():
+    with open("data/indexes/store.pkl", "rb") as f:
+        return pickle.load(f)
+
+@st.cache_resource
+def load_entail():
+    from src.verification.entailment import EntailmentScorer
+    return EntailmentScorer("roberta-large-mnli")
+
+@st.cache_resource
+def load_reranker():
+    from src.retrieval.reranker import CrossEncoderReranker
+    return CrossEncoderReranker()
+
+@st.cache_resource
 def load_agents():
     with open("data/indexes/store.pkl", "rb") as f:
         store = pickle.load(f)
@@ -39,8 +54,8 @@ def load_agents():
 
     return baseline_agent, verified_agent
 
-st.set_page_config(page_title="PDF Verified RAG", layout="wide")
-st.title("📄✅ PDF Verified RAG (Hallucination-Proof QA)")
+st.set_page_config(page_title="Verified RAG", layout="wide")
+st.title("✅ Verified RAG (Hallucination-Proof QA)")
 
 st.write("Ask questions from your indexed PDFs. The system returns answers only if claims are verified.")
 

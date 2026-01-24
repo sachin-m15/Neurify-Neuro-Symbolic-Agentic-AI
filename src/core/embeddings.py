@@ -6,7 +6,7 @@ from openai import OpenAI
 class OpenAIEmbedder:
     def __init__(self, model: str | None = None):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        self.model = model or os.getenv("EMBEDDING_MODEL", "text-embedding-3-large")
+        self.model = model or os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
         # Use tiktoken for token counting
         self.encoding = tiktoken.get_encoding("cl100k_base")  # For text-embedding-3 models
 
@@ -74,5 +74,11 @@ class OpenAIEmbedder:
 
     def __setstate__(self, state):
         self.model = state['model']
+        self.dims = {
+            "text-embedding-3-small": 1536,
+            "text-embedding-3-large": 3072,
+            "text-embedding-ada-002": 1536
+        }
+        self.dim = self.dims.get(self.model, 1536)
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.encoding = tiktoken.get_encoding("cl100k_base")
