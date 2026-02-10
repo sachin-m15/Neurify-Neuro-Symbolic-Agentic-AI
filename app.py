@@ -1,7 +1,12 @@
 import pickle
 import streamlit as st
 import pandas as pd
+import logging
 from dotenv import load_dotenv
+
+# Enable debug logging always
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 from src.core.llm import ChatLLM
 from src.generation.claim_generator import ClaimGenerator
@@ -30,6 +35,7 @@ def load_reranker():
 
 @st.cache_resource
 def load_agents():
+    """Load agents once and cache them"""
     with open("data/indexes/store.pkl", "rb") as f:
         store = pickle.load(f)
 
@@ -39,7 +45,8 @@ def load_agents():
     gen = ClaimGenerator(llm=llm)
 
     entail = EntailmentScorer("roberta-large-mnli")
-    verifier = Verifier(entailment_scorer=entail, support_threshold=support_threshold)
+    # Default threshold, will be updated from session state
+    verifier = Verifier(entailment_scorer=entail, support_threshold=0.80)
 
     baseline_agent = BaselineRAGAgent(
         retriever=baseline_retriever,
@@ -55,7 +62,36 @@ def load_agents():
 
     return baseline_agent, verified_agent
 
+
+# Initialize agents in session state (only loads once)
+if "agents_loaded" not in st.session_state:
+    baseline_agent, verified_agent = load_agents()
+    st.session_state.baseline_agent = baseline_agent
+    st.session_state.verified_agent = verified_agent
+    st.session_state.agents_loaded = True
+else:
+    baseline_agent = st.session_state.baseline_agent
+    verified_agent = st.session_state.verified_agent
+
 st.set_page_config(page_title="Neurify", layout="wide", page_icon="🧠")
+
+# Initialize session state for threshold (before agents load)
+if "support_threshold" not in st.session_state:
+    st.session_state.support_threshold = 0.80
+
+# Initialize agents in session state (only loads once)
+if "agents_loaded" not in st.session_state:
+    with st.spinner("Loading agents..."):
+        baseline_agent, verified_agent = load_agents()
+        st.session_state.baseline_agent = baseline_agent
+        st.session_state.verified_agent = verified_agent
+        st.session_state.agents_loaded = True
+        # Set initial threshold
+        verified_agent.verifier.support_threshold = st.session_state.support_threshold
+else:
+    baseline_agent = st.session_state.baseline_agent
+    verified_agent = st.session_state.verified_agent
+
 # Custom CSS for better styling
 st.markdown("""
 <style>
@@ -93,30 +129,37 @@ st.markdown("""
 """, unsafe_allow_html=True)
 # Sidebar
 with st.sidebar:
-    st.title("🛠️ Settings")
-    st.markdown("---")
-    support_threshold = st.slider("Verification Threshold", 0.0, 1.0, 0.75, 0.05)
-    st.markdown("Adjust the minimum entailment score required for claim verification.")
-    st.markdown("---")
     st.markdown("### About Neurify")
     st.write("Neurify uses neuro-symbolic AI to verify RAG responses against document evidence, preventing hallucinations.")
+    st.markdown("---")
+
+    st.markdown("### WHO Guidelines are uploaded to DATABASE")
+    st.write("You can ask questions from WHO Guidelines.")
+    st.markdown("Example queries: ")
+    st.write("1. What is the best time to start antiretroviral therapy for someone newly diagnosed with HIV?")
+    st.write("2. Is TB preventive treatment (TPT) recommended for pregnant women living with HIV, and if so, which medicines are considered safe?")
+    st.write("3. What is the recommended dosage of co-trimoxazole for the prevention of Pneumocystis pneumonia in adults with HIV?")
     st.markdown("---")
     st.markdown("**Features:**")
     st.write("• Baseline vs Verified RAG comparison")
     st.write("• Real-time verification")
-    st.write("• Detailed claim analysis")
+    st.write("• Detailed claim analysis") 
 st.title("🧠 Neurify")
 st.markdown('<p class="main-header">Hallucination-Proof</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Neuro-symbolic verification engine for trustworthy Retrieval-Augmented Generation</p>', unsafe_allow_html=True)
 st.markdown("---")
+
 st.write("💡 Ask questions from your indexed PDFs. Get answers only when claims are verified against evidence.")
 st.header("💬 Enter your question here...")
 question = st.text_area("", height=80, placeholder="Ask anything from your indexed documents...")
 
-baseline_agent, verified_agent = load_agents()
-verified_agent.verifier.support_threshold = support_threshold
+# Get current threshold from session state
+support_threshold = st.session_state.support_threshold
 
 if st.button("🚀 Run Analysis", type="primary") and question:
+    # Threshold is already set from session state
+    verified_agent.verifier.support_threshold = support_threshold
+    
     with st.spinner("🧠 Processing your question with neuro-symbolic verification..."):
         
         # Run both agents
@@ -159,36 +202,50 @@ if st.button("🚀 Run Analysis", type="primary") and question:
         with metric_col2:
             if verified_result["answer"] == "NOT_ENOUGH_EVIDENCE":
                 st.error("❌ No verified info")
-            else:
+            elif verified_result["status"] == "PASS":
                 st.success("✅ Verified")
+            else:
+                st.warning("🔄 Retry Needed")
         with metric_col3:
             st.metric("Claims", len(verified_result["claims"]))
 
         if verified_result["answer"] == "NOT_ENOUGH_EVIDENCE":
             st.error("❌ No verified information found for this query in the indexed documents.")
-        else:
+        elif verified_result["status"] == "PASS":
             st.write("**Answer:**", verified_result["answer"])
+            st.success("✅ All claims verified successfully!")
+        else:
+            st.warning("⚠️ Answer blocked - some claims failed verification")
+            verification = verified_result.get("verification", {})
+            unsupported = sum(1 for cr in verification.get("claim_reports", []) if cr["status"] != "SUPPORTED")
+            if unsupported > 0:
+                st.write(f"📊 {unsupported} claim(s) have scores below threshold ({support_threshold:.2f})")
 
     st.markdown("---")
     
     st.markdown("---")    
     # Verification Report (full width)
     st.subheader("🔍 Neuro-Symbolic Verification Results")
+    st.info(f"📋 **Verification Rule:** ALL claims must have Entailment Score ≥ {support_threshold:.2f} for verified answer")
     with st.expander("🔍 Detailed Neuro-Symbolic Verification", expanded=True):
         verification = verified_result.get("verification", {})
         if verification:
-            col1, col2 = st.columns(2)
+            col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric("Overall Status", verification.get('overall_status'))
             with col2:
                 supported = sum(1 for cr in verification.get("claim_reports", []) if cr["status"] == "SUPPORTED")
                 total = len(verification.get("claim_reports", []))
                 st.metric("Claims Supported", f"{supported}/{total}")
+            with col3:
+                st.metric("Threshold", f"≥ {support_threshold:.2f}")
 
             st.write("**Claim Verification Details:**")
             for claim in verification.get("claim_reports", []):
                 status_icon = "✅" if claim["status"] == "SUPPORTED" else "❌"
-                st.write(f"{status_icon} **Claim {claim['claim_id']}:** {claim['status']} (Entailment Score: {claim['score']:.3f})")
+                score_str = f"{claim['score']:.3f}" if claim['score'] > 0 else "N/A"
+                meets_threshold = "✅" if claim["score"] >= support_threshold else "❌"
+                st.write(f"{status_icon} **Claim {claim['claim_id']}:** {claim['status']} | Score: {score_str} {meets_threshold}")
                 if claim.get("reasons"):
                     st.write("   *Reasons:*", ", ".join(claim["reasons"]))
         else:

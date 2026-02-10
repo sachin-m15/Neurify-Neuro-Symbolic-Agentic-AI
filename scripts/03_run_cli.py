@@ -33,7 +33,7 @@ def main():
     verified_retriever = Retriever(store, llm=llm)  # With query expansion and reranking
     generator = ClaimGenerator(llm)
     entailment = EntailmentScorer()
-    verifier = Verifier(entailment, support_threshold=0.75)
+    verifier = Verifier(entailment, support_threshold=0.80)
 
     baseline_agent = BaselineRAGAgent(
         retriever=baseline_retriever,
