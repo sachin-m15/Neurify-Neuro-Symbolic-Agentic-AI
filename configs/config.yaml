@@ -13,6 +13,6 @@ verification:
   max_retries: 2
 
 models:
-  openai_chat_model: "gpt-4o-mini"
-  openai_embedding_model: "text-embedding-3-large"
+  groq_chat_model: "mixtral-8x7b-32768"
+  groq_embedding_model: "mixtral-8x7b-32768"  # Assuming same for now, but embeddings might be different
   nli_model: "roberta-large-mnli"

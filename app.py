@@ -16,6 +16,9 @@ from src.verification.verifier import Verifier
 from src.agent.orchestrator import VerifiedRAGAgent
 from src.agent.baseline_orchestrator import BaselineRAGAgent
 
+# Set page config as the first Streamlit command
+st.set_page_config(page_title="Neurify", layout="wide", page_icon="🧠")
+
 load_dotenv()
 
 @st.cache_resource
@@ -61,19 +64,6 @@ def load_agents():
     )
 
     return baseline_agent, verified_agent
-
-
-# Initialize agents in session state (only loads once)
-if "agents_loaded" not in st.session_state:
-    baseline_agent, verified_agent = load_agents()
-    st.session_state.baseline_agent = baseline_agent
-    st.session_state.verified_agent = verified_agent
-    st.session_state.agents_loaded = True
-else:
-    baseline_agent = st.session_state.baseline_agent
-    verified_agent = st.session_state.verified_agent
-
-st.set_page_config(page_title="Neurify", layout="wide", page_icon="🧠")
 
 # Initialize session state for threshold (before agents load)
 if "support_threshold" not in st.session_state:
@@ -136,9 +126,9 @@ with st.sidebar:
     st.markdown("### WHO Guidelines are uploaded to DATABASE")
     st.write("You can ask questions from WHO Guidelines.")
     st.markdown("Example queries: ")
-    st.write("1. What is the best time to start antiretroviral therapy for someone newly diagnosed with HIV?")
-    st.write("2. Is TB preventive treatment (TPT) recommended for pregnant women living with HIV, and if so, which medicines are considered safe?")
-    st.write("3. What is the recommended dosage of co-trimoxazole for the prevention of Pneumocystis pneumonia in adults with HIV?")
+    st.write("1. Who is at risk for Parasites - Trichuriasis (also known as Whipworm Infection)?")
+    st.write("2. What are the genetic changes related to Birt-Hogg-Dub syndrome ?")
+    st.write("3. How many people are affected by N-acetylglutamate synthase deficiency ?")
     st.markdown("---")
     st.markdown("**Features:**")
     st.write("• Baseline vs Verified RAG comparison")

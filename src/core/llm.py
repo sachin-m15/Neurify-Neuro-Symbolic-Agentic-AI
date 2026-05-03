@@ -1,10 +1,14 @@
 import os
+import json
 from openai import OpenAI
 
 class ChatLLM:
     def __init__(self, model: str | None = None):
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        self.client = OpenAI(
+            api_key=os.getenv("GROQ_API_KEY"),
+            base_url="https://api.groq.com/openai/v1"
+        )
+        self.model = model or os.getenv("GROQ_MODEL", "mixtral-8x7b-32768")
 
     def generate(self, prompt: str, max_tokens: int = 1000, temperature: float = 0.7) -> str:
         """
@@ -33,4 +37,5 @@ class ChatLLM:
             response_format={"type": "json_object"},
             temperature=0.2,
         )
-        return resp.choices[0].message.content and __import__("json").loads(resp.choices[0].message.content)
+        content = resp.choices[0].message.content or ""
+        return json.loads(content)

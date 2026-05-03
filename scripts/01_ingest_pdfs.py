@@ -1,38 +1,48 @@
 import os
 import sys
 import json
+import pandas as pd
 from pathlib import Path
 from dotenv import load_dotenv
 
 # Add project root to Python path
 sys.path.append(str(Path(__file__).parent.parent))
 
+from src.core.models import Chunk
 from src.core.utils import safe_doc_id
-from src.ingest.pdf_loader import extract_text_from_pdf
 from src.ingest.cleaner import clean_page_text
-from src.ingest.chunker import chunk_pages
 
 load_dotenv()
 
-RAW_DIR = Path("data/raw_pdfs")
+CSV_PATH = Path("data/train.csv")
 OUT_DIR = Path("data/chunks")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 def main():
     all_chunks = []
-    pdfs = list(RAW_DIR.glob("*.pdf"))
-    print(f"Processing {len(pdfs)} PDFs...")
-    for i, pdf in enumerate(pdfs, 1):
-        doc_id = safe_doc_id(str(pdf))
-        print(f"[{i}/{len(pdfs)}] Processing {pdf.name}...")
-        pages = extract_text_from_pdf(str(pdf))
-        print(f"  Extracted {len(pages)} pages")
-        for p in pages:
-            p["text"] = clean_page_text(p["text"])
+    df = pd.read_csv(CSV_PATH)
+    print(f"Processing {len(df)} rows from CSV...")
 
-        chunks = chunk_pages(doc_id=doc_id, pages=pages)
-        print(f"  Created {len(chunks)} chunks")
-        all_chunks.extend([c.model_dump() for c in chunks])
+    for idx, row in df.iterrows():
+        doc_id = f"csv_row_{idx}"
+        question = row['Question']
+        answer = row['Answer']
+        qtype = row['qtype']
+        text = f"Question: {question}\nAnswer: {answer}"
+        cleaned_text = clean_page_text(text)
+
+        chunk = Chunk(
+            chunk_id=f"{doc_id}_chunk",
+            doc_id=doc_id,
+            page=1,
+            text=cleaned_text,
+            section=qtype,
+            meta=row.to_dict()
+        )
+        all_chunks.append(chunk.model_dump())
+
+        if (idx + 1) % 50 == 0:
+            print(f"Processed {idx + 1} rows...")
 
     out_path = OUT_DIR / "chunks.json"
     out_path.write_text(json.dumps(all_chunks, indent=2), encoding="utf-8")

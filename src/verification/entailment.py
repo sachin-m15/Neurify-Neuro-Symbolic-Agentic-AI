@@ -3,7 +3,7 @@ from transformers import pipeline
 class EntailmentScorer:
     def __init__(self, model_name: str = "roberta-large-mnli"):
         # returns: LABEL_0/1/2 depending on model, but pipeline gives score per label
-        self.pipe = pipeline("text-classification", model=model_name, top_k=None)
+        self.pipe = pipeline("text-classification", model=model_name, top_k=None, truncation=True, max_length=512)
 
     def score(self, claim: str, evidence: str) -> float:
         """

@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 sys.path.append(str(Path(__file__).parent.parent))
 
 from src.core.models import Chunk
-from src.core.embeddings import OpenAIEmbedder
+from src.core.embeddings import GeminiEmbedder
 from src.retrieval.vector_store import VectorStore
 
 load_dotenv()
@@ -21,8 +21,8 @@ def main():
     raw = json.loads(CHUNKS_PATH.read_text(encoding="utf-8"))
     chunks = [Chunk(**c) for c in raw]
 
-    embedder = OpenAIEmbedder()
-    store = VectorStore(embedder=embedder, dim=3072)
+    embedder = GeminiEmbedder()
+    store = VectorStore(embedder=embedder, dim=embedder.dim)
 
     store.add_chunks(chunks)
 
