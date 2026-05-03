@@ -5,6 +5,8 @@ pydantic
 google-generativeai
 google-genai
 
+openai
+
 faiss-cpu
 numpy
 
