@@ -307,8 +307,8 @@ The following 350 queries were used in the recent RAG evaluation, demonstrating 
 ---
 
 ### Dataset Migration
-- **Switched to structured Q&A dataset** (`data/train.csv`) containing medical Q&A pairs
-- **Updated data pipeline** to process CSV format instead of raw PDFs
+- **Added structured Q&A dataset** (`data/train.csv`) containing medical Q&A pairs
+- **Updated data pipeline** to process CSV format
 - **Maintained chunk-based retrieval** while improving data structure and quality
 
 ### New Evaluation Capabilities
@@ -317,7 +317,7 @@ The following 350 queries were used in the recent RAG evaluation, demonstrating 
   - Recall@k evaluation (k=100,300,350)
   - Mean Reciprocal Rank (MRR)
   - Semantic similarity scoring
-- **Tested on 5 medical queries** with excellent results (MRR: 0.900, Recall@3: 1.000)
+- **Tested on 100 medical queries** with excellent results (MRR: 0.900, Recall@100: 0.800)
 - **Verified retrieval system performance** demonstrating robust document chunk retrieval
 
 ### Performance Insights
