@@ -119,13 +119,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 # Sidebar
 with st.sidebar:
-    st.markdown("### About Neurify")
+    st.markdown("# About Neurify")
     st.write("Neurify uses neuro-symbolic AI to verify RAG responses against document evidence, preventing hallucinations.")
     st.markdown("---")
 
-    st.markdown("### WHO Guidelines are uploaded to DATABASE")
-    st.write("You can ask questions from WHO Guidelines.")
-    st.markdown("Example queries: ")
+    st.markdown("### Example queries: ")
     st.write("1. Who is at risk for Parasites - Trichuriasis (also known as Whipworm Infection)?")
     st.write("2. What are the genetic changes related to Birt-Hogg-Dub syndrome ?")
     st.write("3. How many people are affected by N-acetylglutamate synthase deficiency ?")
@@ -139,7 +137,7 @@ st.markdown('<p class="main-header">Hallucination-Proof</p>', unsafe_allow_html=
 st.markdown('<p class="sub-header">Neuro-symbolic verification engine for trustworthy Retrieval-Augmented Generation</p>', unsafe_allow_html=True)
 st.markdown("---")
 
-st.write("💡 Ask questions from your indexed PDFs. Get answers only when claims are verified against evidence.")
+st.write("💡 Get answers only when claims are verified against evidence.")
 st.header("💬 Enter your question here...")
 question = st.text_area("", height=80, placeholder="Ask anything from your indexed documents...")
 
