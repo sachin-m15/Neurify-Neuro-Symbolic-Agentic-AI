@@ -269,7 +269,7 @@ python scripts/05_evaluate_rag.py
 
 ## 🧪 Evaluated Queries & Responses
 
-The following 350 queries were used in the recent RAG evaluation, demonstrating excellent retrieval performance (MRR: 0.900, Recall@350: 0.940). Each query shows the ground truth answer from the indexed documents and the system's retrieved response.
+The following few queries were used in the recent RAG evaluation, demonstrating excellent retrieval performance (MRR: 0.900, Recall@350: 0.940). Each query shows the ground truth answer from the indexed documents and the system's retrieved response.
 
 ### 1. Who is at risk for Lymphocytic Choriomeningitis (LCM)?
 
