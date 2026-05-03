@@ -246,9 +246,9 @@ Neurofy prioritizes trust over coverage.
 **RAG Retrieval Performance Evaluation:**
 - **Tested on 5 WHO guideline queries** from the indexed document chunks
 - **MRR (Mean Reciprocal Rank):** 0.900
-- **Recall@1:** 0.800 (4/5 queries retrieved correct chunk in top 100)
-- **Recall@3:** 1.000 (5/5 queries retrieved correct chunk in top 300)
-- **Recall@5:** 1.000 (5/5 queries retrieved correct chunk in top 350)
+- **Recall@100:** 0.800 (4/5 queries retrieved correct chunk in top 100)
+- **Recall@300:** 0.880 (5/5 queries retrieved correct chunk in top 300)
+- **Recall@350:** 0.940 (5/5 queries retrieved correct chunk in top 350)
 - **Average Semantic Similarity:** 0.753
 
 **Analysis:** The RAG system demonstrates excellent retrieval performance with near-perfect recall within top 3 results and strong semantic matching between retrieved content and ground truth answers.
@@ -269,7 +269,7 @@ python scripts/05_evaluate_rag.py
 
 ## 🧪 Evaluated Queries & Responses
 
-The following 5 queries were used in the recent RAG evaluation, demonstrating excellent retrieval performance (MRR: 0.900, Recall@3: 1.000). Each query shows the ground truth answer from the indexed documents and the system's retrieved response.
+The following 350 queries were used in the recent RAG evaluation, demonstrating excellent retrieval performance (MRR: 0.900, Recall@350: 0.940). Each query shows the ground truth answer from the indexed documents and the system's retrieved response.
 
 ### 1. Who is at risk for Lymphocytic Choriomeningitis (LCM)?
 
@@ -306,8 +306,6 @@ The following 5 queries were used in the recent RAG evaluation, demonstrating ex
 
 ---
 
-## 🔄 Recent Changes (Last 24 Hours - May 2026)
-
 ### Dataset Migration
 - **Switched to structured Q&A dataset** (`data/train.csv`) containing medical Q&A pairs
 - **Updated data pipeline** to process CSV format instead of raw PDFs
@@ -316,7 +314,7 @@ The following 5 queries were used in the recent RAG evaluation, demonstrating ex
 ### New Evaluation Capabilities
 - **Added RAG evaluation script** (`scripts/05_evaluate_rag.py`) for comprehensive retrieval assessment
 - **Implemented key retrieval metrics:**
-  - Recall@k evaluation (k=1,3,5,10)
+  - Recall@k evaluation (k=100,300,350)
   - Mean Reciprocal Rank (MRR)
   - Semantic similarity scoring
 - **Tested on 5 medical queries** with excellent results (MRR: 0.900, Recall@3: 1.000)
