@@ -1,0 +1,543 @@
+{
+  "summary": {
+    "total_queries": 46,
+    "mrr": 0.8739130434782609,
+    "recall_scores": {
+      "Recall@1": 0.8043478260869565,
+      "Recall@3": 0.9347826086956522,
+      "Recall@5": 0.9565217391304348
+    },
+    "sections_covered": [
+      "susceptibility",
+      "symptoms",
+      "exams and tests",
+      "treatment",
+      "prevention",
+      "information",
+      "frequency",
+      "complications",
+      "causes",
+      "research",
+      "outlook",
+      "considerations",
+      "inheritance",
+      "stages",
+      "genetic changes",
+      "support groups"
+    ]
+  },
+  "section_stats": {
+    "susceptibility": {
+      "count": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    },
+    "symptoms": {
+      "count": 3,
+      "mrr": 0.8333333333333334,
+      "recall@1": 0.6666666666666666,
+      "recall@3": 1.0
+    },
+    "exams and tests": {
+      "count": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    },
+    "treatment": {
+      "count": 3,
+      "mrr": 0.8333333333333334,
+      "recall@1": 0.6666666666666666,
+      "recall@3": 1.0
+    },
+    "prevention": {
+      "count": 3,
+      "mrr": 0.6666666666666666,
+      "recall@1": 0.6666666666666666,
+      "recall@3": 0.6666666666666666
+    },
+    "information": {
+      "count": 3,
+      "mrr": 0.7333333333333334,
+      "recall@1": 0.6666666666666666,
+      "recall@3": 0.6666666666666666
+    },
+    "frequency": {
+      "count": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    },
+    "complications": {
+      "count": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    },
+    "causes": {
+      "count": 3,
+      "mrr": 0.5,
+      "recall@1": 0.3333333333333333,
+      "recall@3": 0.6666666666666666
+    },
+    "research": {
+      "count": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    },
+    "outlook": {
+      "count": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    },
+    "considerations": {
+      "count": 3,
+      "mrr": 0.6666666666666666,
+      "recall@1": 0.3333333333333333,
+      "recall@3": 1.0
+    },
+    "inheritance": {
+      "count": 3,
+      "mrr": 0.8333333333333334,
+      "recall@1": 0.6666666666666666,
+      "recall@3": 1.0
+    },
+    "stages": {
+      "count": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    },
+    "genetic changes": {
+      "count": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    },
+    "support groups": {
+      "count": 1,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0
+    }
+  },
+  "detailed_results": [
+    {
+      "question": "are certain people at risk of getting vancomycin-resistant enterococci?",
+      "section": "susceptibility",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "Who is at risk for Immune Thrombocytopenia? ?",
+      "section": "susceptibility",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "Who is at risk for Childhood Acute Myeloid Leukemia and Other Myeloid Malignancies? ?",
+      "section": "susceptibility",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the symptoms of Bixler Christian Gorlin syndrome ?",
+      "section": "symptoms",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the symptoms of Prader-Willi syndrome ?",
+      "section": "symptoms",
+      "rank": 2,
+      "rr": 0.5,
+      "Recall@1": 0.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the symptoms of Pterygium of the conjunctiva and cornea ?",
+      "section": "symptoms",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How to diagnose Nasopharyngeal Cancer ?",
+      "section": "exams and tests",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How to diagnose Periodic fever, aphthous stomatitis, pharyngitis and adenitis ?",
+      "section": "exams and tests",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How to diagnose Childhood Vascular Tumors ?",
+      "section": "exams and tests",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the treatments for keratitis-ichthyosis-deafness syndrome ?",
+      "section": "treatment",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the treatments for cleidocranial dysplasia ?",
+      "section": "treatment",
+      "rank": 2,
+      "rr": 0.5,
+      "Recall@1": 0.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the treatments for Frontotemporal Dementia ?",
+      "section": "treatment",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How to prevent Breast Cancer ?",
+      "section": "prevention",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How to prevent What I need to know about Gestational Diabetes ?",
+      "section": "prevention",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How to prevent Diagnosis of Diabetes and Prediabetes ?",
+      "section": "prevention",
+      "rank": null,
+      "rr": 0.0,
+      "Recall@1": 0.0,
+      "Recall@3": 0.0,
+      "Recall@5": 0.0
+    },
+    {
+      "question": "Do you have information about Volcanoes",
+      "section": "information",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What is (are) Sheldon-Hall syndrome ?",
+      "section": "information",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What is (are) Prostate Cancer ?",
+      "section": "information",
+      "rank": 5,
+      "rr": 0.2,
+      "Recall@1": 0.0,
+      "Recall@3": 0.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How many people are affected by Langerhans cell histiocytosis ?",
+      "section": "frequency",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How many people are affected by otospondylomegaepiphyseal dysplasia ?",
+      "section": "frequency",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "How many people are affected by Kearns-Sayre syndrome ?",
+      "section": "frequency",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the complications of Paget's Disease of Bone ?",
+      "section": "complications",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the complications of Ectopic Kidney ?",
+      "section": "complications",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the complications of Peyronie's Disease ?",
+      "section": "complications",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What causes Jones syndrome ?",
+      "section": "causes",
+      "rank": 2,
+      "rr": 0.5,
+      "Recall@1": 0.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What causes Multifocal motor neuropathy ?",
+      "section": "causes",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What causes Hypoglycemia ?",
+      "section": "causes",
+      "rank": null,
+      "rr": 0.0,
+      "Recall@1": 0.0,
+      "Recall@3": 0.0,
+      "Recall@5": 0.0
+    },
+    {
+      "question": "what research (or clinical trials) is being done for Hemifacial Spasm ?",
+      "section": "research",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "what research (or clinical trials) is being done for Gastrointestinal Carcinoid Tumors ?",
+      "section": "research",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "what research (or clinical trials) is being done for Parkinson's Disease ?",
+      "section": "research",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What is the outlook for Foot Drop ?",
+      "section": "outlook",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What is the outlook for Myotonia ?",
+      "section": "outlook",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What is the outlook for Transmissible Spongiform Encephalopathies ?",
+      "section": "outlook",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What to do for Cushing's Syndrome ?",
+      "section": "considerations",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What to do for Gastritis ?",
+      "section": "considerations",
+      "rank": 2,
+      "rr": 0.5,
+      "Recall@1": 0.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What to do for IgA Nephropathy ?",
+      "section": "considerations",
+      "rank": 2,
+      "rr": 0.5,
+      "Recall@1": 0.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "Is Angelman syndrome inherited ?",
+      "section": "inheritance",
+      "rank": 2,
+      "rr": 0.5,
+      "Recall@1": 0.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "Is biotinidase deficiency inherited ?",
+      "section": "inheritance",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "Is X-linked intellectual disability, Siderius type inherited ?",
+      "section": "inheritance",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the stages of Male Breast Cancer ?",
+      "section": "stages",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the stages of Childhood Liver Cancer ?",
+      "section": "stages",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the stages of Small Cell Lung Cancer ?",
+      "section": "stages",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the genetic changes related to myoclonic epilepsy myopathy sensory ataxia ?",
+      "section": "genetic changes",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the genetic changes related to citrullinemia ?",
+      "section": "genetic changes",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "What are the genetic changes related to combined pituitary hormone deficiency ?",
+      "section": "genetic changes",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    },
+    {
+      "question": "Where to find support for people with Alcohol Use and Older Adults ?",
+      "section": "support groups",
+      "rank": 1,
+      "rr": 1.0,
+      "Recall@1": 1.0,
+      "Recall@3": 1.0,
+      "Recall@5": 1.0
+    }
+  ]
+}
